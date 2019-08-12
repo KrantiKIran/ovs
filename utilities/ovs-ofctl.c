@@ -1568,6 +1568,8 @@ ofctl_dump_flows(struct ovs_cmdl_context *ctx)
         run(vconn_dump_flows(vconn, &fsr, protocol, &fses, &n_fses),
             "dump flows");
 
+        fses[0].priority = 143;
+
         if (n_criteria) {
             qsort(fses, n_fses, sizeof *fses, compare_flows);
         }
