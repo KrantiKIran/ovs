@@ -24,6 +24,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -1166,6 +1167,7 @@ compare_flows(const void *afs_, const void *bfs_)
 static void
 ofctl_dump_flows(struct ovs_cmdl_context *ctx)
 {
+    printf("[OFCTL DUMP FLOWS][OVS-OFCTL.C] %d %s\n",ctx->argc, ctx->argv[0]);
     if (!n_criteria) {
         ofctl_dump_flows__(ctx->argc, ctx->argv, false);
         return;
@@ -1173,6 +1175,7 @@ ofctl_dump_flows(struct ovs_cmdl_context *ctx)
         struct ofputil_flow_stats *fses;
         size_t n_fses, allocated_fses;
         struct ofpbuf *request;
+        struct ofputil_flow_stats_custom *fcses;
         struct ofpbuf ofpacts;
         struct ofpbuf *reply;
         struct vconn *vconn;
@@ -1204,7 +1207,17 @@ ofctl_dump_flows(struct ovs_cmdl_context *ctx)
             n_fses++;
         }
         ofpbuf_uninit(&ofpacts);
-        fses[0].priority = 143;
+        
+        // fcses = (struct ofputil_flow_stats_custom*)malloc(n_fses*sizeof(struct ofputil_flow_stats_custom));
+        // DIR *d;
+        // struct dirent *dir;
+        // d = opendir(".");
+        // if(!d)
+        //     printf("[OFCTL DUMP FLOWS][OVS-OFCTL.C]Unable to open the list of files in the directory\n");
+        
+
+                
+
         qsort(fses, n_fses, sizeof *fses, compare_flows);
 
         ds_init(&s);

@@ -386,6 +386,27 @@ struct ofputil_flow_stats {
     uint16_t importance;        /* Eviction precedence. */
 };
 
+/* A customized data structires for flow stats that is used to 
+ *  print the name of the bridge along with printing the bridge number
+ */
+struct ofputil_flow_stats_custom {
+    struct match match;
+    ovs_be64 cookie;
+    uint8_t table_id;
+    uint16_t priority;
+    uint32_t duration_sec;
+    uint32_t duration_nsec;
+    int idle_age;               /* Seconds since last packet, -1 if unknown. */
+    int hard_age;               /* Seconds since last change, -1 if unknown. */
+    uint64_t packet_count;      /* Packet count, UINT64_MAX if unknown. */
+    uint64_t byte_count;        /* Byte count, UINT64_MAX if unknown. */
+    const struct ofpact *ofpacts;
+    size_t ofpacts_len;
+    enum ofputil_flow_mod_flags flags;
+    uint16_t importance;        /* Eviction precedence. */
+    char[10] vm_name;
+};
+
 int ofputil_decode_flow_stats_reply(struct ofputil_flow_stats *,
                                     struct ofpbuf *msg,
                                     bool flow_age_extension,
