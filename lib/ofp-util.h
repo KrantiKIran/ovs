@@ -404,7 +404,7 @@ struct ofputil_flow_stats_custom {
     size_t ofpacts_len;
     enum ofputil_flow_mod_flags flags;
     uint16_t importance;        /* Eviction precedence. */
-    char[10] vm_name;
+    char vm_name[10];
 };
 
 int ofputil_decode_flow_stats_reply(struct ofputil_flow_stats *,
