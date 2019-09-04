@@ -1552,44 +1552,69 @@ compare_flows(const void *afs_, const void *bfs_)
 static void
 ofctl_dump_flows(struct ovs_cmdl_context *ctx)
 {
-    if (!n_criteria && !should_show_names() && show_stats) {
-        ofctl_dump_flows__(ctx->argc, ctx->argv, false);
-        return;
-    } else {
-        struct ofputil_flow_stats_request fsr;
-        enum ofputil_protocol protocol;
-        struct vconn *vconn;
+//    if (!n_criteria && !should_show_names() && show_stats) {
+//        printf("[OVS-OFCTL.C][OFCTL_DUMP_FLOWS]Entered the weird IF condition \n\n");
+  //      ofctl_dump_flows__(ctx->argc, ctx->argv, false);
+    //    return;
+    //} else {
+        // struct ofputil_flow_stats_request fsr;
+        // enum ofputil_protocol protocol;
+        // struct vconn *vconn;
 
-        vconn = prepare_dump_flows(ctx->argc, ctx->argv, false,
-                                   &fsr, &protocol);
+        // vconn = prepare_dump_flows(ctx->argc, ctx->argv, false,
+        //                            &fsr, &protocol);
 
-        struct ofputil_flow_stats *fses;
-        size_t n_fses;
-        run(vconn_dump_flows(vconn, &fsr, protocol, &fses, &n_fses),
-            "dump flows");
+        // struct ofputil_flow_stats *fses;
+        // size_t n_fses;
+        // run(vconn_dump_flows(vconn, &fsr, protocol, &fses, &n_fses),
+        //     "dump flows");
 
-        if (n_criteria) {
-            qsort(fses, n_fses, sizeof *fses, compare_flows);
-        }
+        // if (n_criteria) {
+        //     qsort(fses, n_fses, sizeof *fses, compare_flows);
+        // }
 
-        struct ds s = DS_EMPTY_INITIALIZER;
-        for (size_t i = 0; i < n_fses; i++) {
-            ds_clear(&s);
-            ofputil_flow_stats_format(&s, &fses[i],
-                                      ports_to_show(ctx->argv[1]),
-                                      tables_to_show(ctx->argv[1]),
-                                      show_stats);
-            printf(" %s\n", ds_cstr(&s));
-        }
-        ds_destroy(&s);
+        FILE *fptr; 
+  
+        char c; 
+  //      printf("[OVS-OFCTL.C][OFCTL_DUMP_FLOWS]Entered the noce Else condition\n");
+    
+        // Open file 
+        fptr = fopen(ctx->argv[1], "r"); 
+        if (fptr == NULL) 
+        { 
+    //        printf("[OVS-OFCTL.C][OFCTL_DUMP_FLOWS]Cannot open file %s\n",ctx->argv[1]); 
+            return;
+        } 
 
-        for (size_t i = 0; i < n_fses; i++) {
-            free(CONST_CAST(struct ofpact *, fses[i].ofpacts));
-        }
-        free(fses);
+        // Read contents from file 
+        c = fgetc(fptr); 
+      //  printf("[OVS-OFCTL.C][OFCTL_DUMP_FLOWS]Before the main while loop\n");
+        while (c != EOF) 
+        { 
+            printf ("%c", c); 
+            c = fgetc(fptr); 
+        } 
+        printf("\n");
+        fclose(fptr); 
+        
+        // struct ds s = DS_EMPTY_INITIALIZER;
+        // for (size_t i = 0; i < n_fses; i++) {
+        //     ds_clear(&s);
+        //     ofputil_flow_stats_format(&s, &fses[i],
+        //                               ports_to_show(ctx->argv[1]),
+        //                               tables_to_show(ctx->argv[1]),
+        //                               show_stats);
+        //     printf(" %s\n", ds_cstr(&s));
+        // }
+        // ds_destroy(&s);
 
-        vconn_close(vconn);
-    }
+        // for (size_t i = 0; i < n_fses; i++) {
+        //     free(CONST_CAST(struct ofpact *, fses[i].ofpacts));
+        // }
+        // free(fses);
+
+        // vconn_close(vconn);
+//    }
 }
 
 static void
